@@ -11,4 +11,5 @@ const products = mongoose.Schema({
   items_left: Number,
   imageURL: String,
   slug: String,
-});export default model("allProduct", products);
+});
+export const model = mongoose.model("allproducts", products);
