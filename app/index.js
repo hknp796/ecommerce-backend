@@ -6,4 +6,4 @@ app.use(cors());
 import product from "./routes/route.allProduct.js";
 
 app.use("/api", product);
- export default app
+export default app;
