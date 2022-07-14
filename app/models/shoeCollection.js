@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const products = mongoose.Schema({
+const shoe = mongoose.Schema({
   id: String,
   name: String,
   brand: String,
@@ -12,7 +12,4 @@ const products = mongoose.Schema({
   imageURL: String,
   slug: String,
 });
-export const allProducts = mongoose.model("new-nike", products);
-
-
-
+export const shoeCollections = mongoose.model("shoecollections", shoe);
