@@ -42,13 +42,22 @@ const getCloths = async (req, res) => {
     return res.status(500).json(error);
   }
 };
-const getOneProduct = async (req, res) => {
-  const id = req.params.id;
+const getKidProducts = async (req, res) => {
   try {
-    const getOne = await Product.findById(id);
-    res.status(200).json(getOne);
+    const AllProducts = await allProducts.find();
+
+    const kidsProducts = AllProducts.filter((item) => {
+      return item.gender === "Kids";
+    });
+    return res.status(200).json(kidsProducts);
   } catch (error) {
     return res.status(500).json(error);
   }
 };
-export { getWomenProducts, getMenProducts, getOneProduct, getShoes, getCloths };
+export {
+  getWomenProducts,
+  getMenProducts,
+  getShoes,
+  getCloths,
+  getKidProducts,
+};
