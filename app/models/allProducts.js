@@ -12,7 +12,4 @@ const products = mongoose.Schema({
   imageURL: String,
   slug: String,
 });
-export const allProducts = mongoose.model("new-nike", products);
-
-
-
+export const allProducts = mongoose.model("new-nikes", products);

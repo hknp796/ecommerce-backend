@@ -3,7 +3,7 @@ import cors from "cors";
 
 const app = express();
 app.use(cors());
-import product from "./routes/route.allProduct.js";
+import router from "./routes/route.allProduct.js";
 
-app.use("/api", product);
+app.use("/api", router);
 export default app;

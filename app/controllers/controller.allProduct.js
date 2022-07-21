@@ -1,10 +1,27 @@
 import { allProducts } from "../models/allProducts.js";
 import { shoeCollections } from "../models/shoeCollection.js";
 import { clothCollections } from "../models/clothCollection.js";
-const getProducts = async (req, res) => {
+
+const getWomenProducts = async (req, res) => {
   try {
     const AllProducts = await allProducts.find();
-    return res.status(200).json(AllProducts);
+
+    const womenProducts = AllProducts.filter((item) => {
+      return item.gender === "Women";
+    });
+    return res.status(200).json(womenProducts);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+const getMenProducts = async (req, res) => {
+  try {
+    const AllProducts = await allProducts.find();
+
+    const menProducts = AllProducts.filter((item) => {
+      return item.gender === "Men";
+    });
+    return res.status(200).json(menProducts);
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -34,4 +51,4 @@ const getOneProduct = async (req, res) => {
     return res.status(500).json(error);
   }
 };
-export { getProducts, getOneProduct, getShoes, getCloths };
+export { getWomenProducts, getMenProducts, getOneProduct, getShoes, getCloths };
