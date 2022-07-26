@@ -54,10 +54,21 @@ const getKidProducts = async (req, res) => {
     return res.status(500).json(error);
   }
 };
+const singleProduct = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const AllProducts = await allProducts.findById(id);
+
+    return res.status(200).json(AllProducts);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 export {
   getWomenProducts,
   getMenProducts,
   getShoes,
   getCloths,
   getKidProducts,
+  singleProduct,
 };
