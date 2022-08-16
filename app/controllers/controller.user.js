@@ -24,7 +24,6 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log(req.body);
   try {
     const user = await Users.findOne({ email: req.body.email });
 
@@ -35,7 +34,7 @@ const login = async (req, res) => {
     }
 
     const match = await user.checkPassword(req.body.password);
-    console.log(match, "amthc");
+
     if (!match) {
       return res
         .status(500)
@@ -49,4 +48,25 @@ const login = async (req, res) => {
     return res.status(500).json({ message: e.message, status: "Failed" });
   }
 };
-export { signup, login };
+function authentication(req) {
+  const token = req.headers.authorization.replace("Bearer ", "");
+
+  jwt.verify(token, "dddd", function (err, decoded) {
+
+    req.user = decoded;
+  });
+}
+
+const userData = async (req, res) => {
+  authentication(req);
+  try {
+    let user = await Users.findOne({ email: req.user.user.email });
+    console.log(user, "uesr");
+    if (user) {
+      return res.status(200).json(user);
+    }
+  } catch (e) {
+    return res.status(500).json({ message: e.message, status: "Failed" });
+  }
+};
+export { signup, login, userData };

@@ -11,7 +11,5 @@ import user from "./routes/route.user.js";
 app.use("/api", router);
 app.use("/api", user);
 
-app.get("/api/auth/user", (req, res) => {
-  return res.status(200).json("hello");
-});
+
 export default app;

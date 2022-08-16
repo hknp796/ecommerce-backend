@@ -13,6 +13,6 @@ router.get("/shoes", getShoes);
 router.get("/women", getWomenProducts);
 router.get("/men", getMenProducts);
 router.get("/kids", getKidProducts);
-router.get("/:id", singleProduct);
+router.get("/product/:id", singleProduct);
 
 export default router;
