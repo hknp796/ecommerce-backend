@@ -48,22 +48,23 @@ const login = async (req, res) => {
     return res.status(500).json({ message: e.message, status: "Failed" });
   }
 };
+
 function authentication(req) {
   const token = req.headers.authorization.replace("Bearer ", "");
 
   jwt.verify(token, "dddd", function (err, decoded) {
-
     req.user = decoded;
   });
 }
 
 const userData = async (req, res) => {
   authentication(req);
+
   try {
     let user = await Users.findOne({ email: req.user.user.email });
-    console.log(user, "uesr");
+
     if (user) {
-      return res.status(200).json(user);
+      return res.status(200).json({ user });
     }
   } catch (e) {
     return res.status(500).json({ message: e.message, status: "Failed" });
