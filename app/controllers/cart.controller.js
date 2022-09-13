@@ -1,12 +1,18 @@
 import { cartItems } from "../models/cartItems.model.js";
-import { userData } from "./controller.user.js";
+
 const cartData = async (req, res) => {
   try {
-    console.log(req.headers, "headers");
+    console.log(req.body, "headers");
 
-    // user = await cartItems.create(req.body.data,user:req.body);
+    req.body.product_id = req.body._id;
+    req.body.user_id = req.user.user._id;
+    delete req.body._id;
 
-    return res.status(201).json("Added  to cart");
+    const cart = await cartItems.create({
+      ...req.body,
+    });
+    console.log({ cart });
+    return res.status(200).json(cart);
   } catch (e) {
     return res.status(500).json({ message: e.message, status: "Failed" });
   }
