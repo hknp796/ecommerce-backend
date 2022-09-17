@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Schema from "mongoose";
 const cartItem = mongoose.Schema({
   name: String,
   brand: String,
