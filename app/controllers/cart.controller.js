@@ -3,6 +3,7 @@ import { cartItems } from "../models/cartItems.model.js";
 const cartData = async (req, res) => {
   try {
     req.body.user_id = req.user.user._id;
+
     delete req.body._id;
     console.log(req.body, "headers");
 
