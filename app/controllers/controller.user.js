@@ -49,17 +49,17 @@ const login = async (req, res) => {
   }
 };
 
-const authentication = (req, res, next) => {
-  const token = req.headers.authorization.replace("Bearer ", "");
-  try {
-    jwt.verify(token, "dddd", function (err, decoded) {
-      req.user = decoded;
-    });
-  } catch (e) {
-    return res.send(401).json("valid token");
-  }
-  return next();
-};
+// const authentication = (req, res, next) => {
+//   const token = req.headers.authorization.replace("Bearer ", "");
+//   try {
+//     jwt.verify(token, "dddd", function (err, decoded) {
+//       req.user = decoded;
+//     });
+//   } catch (e) {
+//     return res.send(401).json("valid token");
+//   }
+//   return next();
+// };
 
 const userData = async (req, res) => {
   try {
@@ -72,4 +72,4 @@ const userData = async (req, res) => {
     return res.status(500).json({ message: e.message, status: "Failed" });
   }
 };
-export { signup, login, userData, authentication };
+export { signup, login, userData };

@@ -1,30 +1,125 @@
 import Razorpay from "razorpay";
-// const payment = express.Router();
 import "dotenv/config";
+import crypto from "crypto";
+
 const razorpay = new Razorpay({
-  key_id: "rzp_live_UZZjgMhuA7745v",
-  key_secret: "ACj5MMeDxoRq5xntaI6cWX2P",
+  key_id: process.env.RAZORPAY_ID,
+  key_secret: process.env.RAZORPAY_SECRET,
 });
-
-const paymentCheck = async (req, res) => {
+let order_id;
+const createOrder = async (req, res) => {
+  console.log(req.body);
   try {
-    const generateOrder = async (amount, currency) => {
-      console.log(amount, currency);
-      const order = await razorpay.orders.create({
-        amount: amount,
-        currency: currency,
-        receipt: "order_rcptid_11",
-      });
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_ID,
+      key_secret: process.env.RAZORPAY_SECRET,
+    });
 
-      return order;
+    const options = {
+      amount: req.body.amount,
+      currency: "INR",
+      receipt: crypto.randomBytes(10).toString("hex"),
     };
 
-    // const amount = `Your random payment amount`;
-    const orders = await generateOrder(10000, "INR");
-    console.log(orders);
-    res.status(200).send(orders);
+    instance.orders.create(options, (error, order) => {
+      if (error) {
+        console.log(error);
+        return res
+          .status(500)
+          .json({ message: "Something went wrong", status: "Failed" });
+      }
+      order_id = order.id;
+      res.status(201).json(order);
+    });
   } catch (error) {
-    return res.status(500).json("error payment");
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
-export { paymentCheck };
+
+const verifyPayment = async (req, res) => {
+  console.log(req.body, "verify");
+  try {
+    const { razorpay_payment_id, razorpay_signature } = req.body;
+
+    const sign = order_id + "|" + razorpay_payment_id;
+
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
+
+    if (razorpay_signature === expectedSign) {
+      return res.status(201).json({ message: "Payment verified successfully" });
+    } else {
+      return res.status(400).json({ message: "Invalid signature sent!" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+export { createOrder, verifyPayment };
+
+// const router = require("express").Router();
+// const Razorpay = require("razorpay");
+// const crypto = require("crypto");
+// require("dotenv").config();
+
+// //Saving the order id to use it for verification purpose
+// let order_id;
+
+// //To create order id
+// router.post("/order", async (req, res) => {
+//   try {
+//     const instance = new Razorpay({
+//       key_id: process.env.RAZORPAY_ID,
+//       key_secret: process.env.RAZORPAY_SECRET,
+//     });
+
+//     const options = {
+//       amount: req.body.amount * 100,
+//       currency: "INR",
+//       receipt: crypto.randomBytes(10).toString("hex"),
+//     };
+
+//     instance.orders.create(options, (error, order) => {
+//       if (error) {
+//         console.log(error);
+//         return res
+//           .status(500)
+//           .json({ message: "Something went wrong", status: "Failed" });
+//       }
+//       order_id = order.id;
+//       res.status(201).json(order);
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
+//To verify payment
+// router.post("/verify", async (req, res) => {
+//   try {
+//     const { razorpay_payment_id, razorpay_signature } = req.body;
+
+//     const sign = order_id + "|" + razorpay_payment_id;
+
+//     const expectedSign = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//       .update(sign.toString())
+//       .digest("hex");
+
+//     if (razorpay_signature === expectedSign) {
+//       return res.status(201).json({ message: "Payment verified successfully" });
+//     } else {
+//       return res.status(400).json({ message: "Invalid signature sent!" });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
+// module.exports = router;

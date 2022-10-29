@@ -7,9 +7,11 @@ app.use(cors());
 app.use(bodyParser.json());
 import router from "./routes/route.allProduct.js";
 import user from "./routes/route.user.js";
-import { paymentCheck } from "./controllers/controller.payment.js";
+import { createOrder } from "./controllers/controller.payment.js";
+import { verifyPayment } from "./controllers/controller.payment.js";
 app.use("/api", router);
 app.use("/api", user);
 
-app.use("/payment", paymentCheck);
+app.use("/api/create", createOrder);
+app.use("/api/payment", verifyPayment);
 export default app;

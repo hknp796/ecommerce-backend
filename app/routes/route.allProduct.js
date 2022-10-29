@@ -8,7 +8,7 @@ import {
   singleProduct,
 } from "../controllers/controller.allProduct.js";
 import { cartData } from "../controllers/cart.controller.js";
-import { authentication } from "../controllers/controller.user.js";
+import { authentication } from "../middleware/authentication.js";
 const router = express.Router();
 router.get("/cloths", getCloths);
 router.get("/shoes", getShoes);
