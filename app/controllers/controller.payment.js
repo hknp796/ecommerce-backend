@@ -2,10 +2,6 @@ import Razorpay from "razorpay";
 import "dotenv/config";
 import crypto from "crypto";
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_ID,
-  key_secret: process.env.RAZORPAY_SECRET,
-});
 let order_id;
 const createOrder = async (req, res) => {
   console.log(req.body);
@@ -29,7 +25,8 @@ const createOrder = async (req, res) => {
           .json({ message: "Something went wrong", status: "Failed" });
       }
       order_id = order.id;
-      res.status(201).json(order);
+      res.status(200).json(order);
+      console.log(order, "order");
     });
   } catch (error) {
     console.log(error);
