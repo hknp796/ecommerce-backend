@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-console.log("indie aytg");
+
 const authentication = (req, res, next) => {
   const token = req.headers.authorization.replace("Bearer ", "");
   try {
