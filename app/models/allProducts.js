@@ -16,13 +16,16 @@ export const allProducts = mongoose.model("new-nikes", products);
 
 var searchschema = mongoose.Schema({
   name: String,
-  email: String,
+  category: String,
+  color: String,
+  description: String,
+  gender: String,
+  title: String,
   profile: {
     something: String,
     somethingElse: String,
   },
 });
-export const searches = searchschema.index({
-  name: "text",
-  "profile.something": "text",
-});
+const searches = mongoose.model("searches", searchschema);
+searches.createIndexes();
+export { searches };
